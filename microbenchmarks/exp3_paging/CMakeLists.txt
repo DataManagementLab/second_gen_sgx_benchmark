@@ -1,0 +1,17 @@
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17")
+set(EDL_SEARCH_PATHS Enclave)
+set(E_SRCS Enclave/Enclave.cpp)
+#makes no sense in this context, but can be useful in a real world example so that different configs can be used for debug/release
+if(SGX_HW AND SGX_MODE STREQUAL "Release")
+    set(LDS Enclave/Enclave.lds)
+else()
+    set(LDS Enclave/Enclave.lds)
+endif()
+add_enclave_library(exp3_pagingenclave SRCS ${E_SRCS} EDL Enclave/Enclave.edl EDL_SEARCH_PATHS ${EDL_SEARCH_PATHS} LDSCRIPT ${LDS})
+enclave_sign(exp3_pagingenclave KEY Enclave/Enclave_private.pem CONFIG Enclave/Enclave.config.xml)
+
+set(SRCS App/App.cpp App/config.cpp)
+add_untrusted_executable(exp3_paging SRCS ${SRCS} EDL Enclave/Enclave.edl EDL_SEARCH_PATHS ${EDL_SEARCH_PATHS})
+target_include_directories(exp3_paging PRIVATE ${SGX_INCLUDE_DIR})
+target_link_libraries(exp3_paging  perfevent shared_headers gflags)
+add_dependencies(exp3_paging exp3_pagingenclave-sign)

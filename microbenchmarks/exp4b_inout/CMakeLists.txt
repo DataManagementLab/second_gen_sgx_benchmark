@@ -1,0 +1,17 @@
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17")
+set(EDL_SEARCH_PATHS Enclave)
+set(E_SRCS Enclave/Enclave.cpp)
+#makes no sense in this context, but can be useful in a real world example so that different configs can be used for debug/release
+if(SGX_HW AND SGX_MODE STREQUAL "Release")
+    set(LDS Enclave/Enclave.lds)
+else()
+    set(LDS Enclave/Enclave.lds)
+endif()
+add_enclave_library(exp4b_inoutenclave SRCS ${E_SRCS} EDL Enclave/Enclave.edl EDL_SEARCH_PATHS ${EDL_SEARCH_PATHS} LDSCRIPT ${LDS})
+enclave_sign(exp4b_inoutenclave KEY Enclave/Enclave_private.pem CONFIG Enclave/Enclave.config.xml)
+
+set(SRCS App/App.cpp App/config.cpp)
+add_untrusted_executable(exp4b_inout SRCS ${SRCS} EDL Enclave/Enclave.edl EDL_SEARCH_PATHS ${EDL_SEARCH_PATHS})
+target_include_directories(exp4b_inout PRIVATE ${SGX_INCLUDE_DIR})
+target_link_libraries(exp4b_inout  perfevent shared_headers gflags)
+add_dependencies(exp4b_inout exp4b_inoutenclave-sign)
