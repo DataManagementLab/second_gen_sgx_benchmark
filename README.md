@@ -1,7 +1,7 @@
 # Benchmarking the Second Generation of Intel SGX Hardware
 This is the source code for our (Muhammad El-Hindi, Tobias Ziegler, Matthias Heinrich, Adrian Lutsch, Zheguang Zhao, Carsten Binnig) published paper at DAMON'22: Benchmarking the Second Generation of Intel SGX Hardware
 
-The paper can be found here:  [Paper Link](hhttps://dl.acm.org/doi/10.1145/3533737.3535098)
+The paper can be found here:  [Paper Link](https://dl.acm.org/doi/10.1145/3533737.3535098)
 
 ## Abstract
 In recent years, trusted execution environments (TEEs) such as Intel Software Guard Extensions (SGX) have gained a lot of attention in the database community. This is because TEEs provide an interesting platform for building trusted databases in the cloud. However, until recently SGX was only available on low-end single socket servers built on the Intel Xeon E3 processor generation and came with many restrictions for building DBMSs. With the availability of the new Ice Lake processors, Intel provides a new implementation of the SGX technology that supports high-end multi-socket servers. With this new implementation, which we refer to as SGXv2 in this paper, Intel promises to address several limitations of SGX enclaves. This raises the question whether previous efforts to overcome the limitations of SGX for DBMSs are still applicable and if the new generation of SGX can truly deliver on the promise to secure data without compromising on performance. To answer this question, in this paper we conduct a first systematic performance study of Intel SGXv2 and compare it to the previous generation of SGX.
